@@ -32,8 +32,8 @@ echo "<br>";
 <head>
 <script src="tabela_wierszowa.js?v=3"></script>
 <script src="notatki.js?v=4"></script>
-<script src="grupa.js?v=6" type="module"></script>
-<link rel="stylesheet" href="style.css?ver=7">
+<script src="grupa.js?v=8" type="module"></script>
+<link rel="stylesheet" href="style.css?ver=9">
 </head>
 <body>
 <h1 id="msg"></h1>

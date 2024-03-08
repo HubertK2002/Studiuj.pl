@@ -10,7 +10,7 @@ class Grupa extends HTMLElement
         //this.appendChild(AddElementRect());
     }
     connectedCallback() {
-        const sel = document.createElement("select-moj");
+        const sel = document.createElement("select","select-moj");
         this.appendChild(sel);
         const rect = document.createElement("rect-select");
         rect.Init123(sel);
@@ -19,25 +19,23 @@ class Grupa extends HTMLElement
     }
 
 }
-class Select extends HTMLElement
+class Select extends HTMLSelectElement
 {
-    Select;
     constructor() {
-        super();
+        self = super();
     }
     connectedCallback() {
-        this.Select = document.createElement("select");
+        //this.Select = document.createElement("select");
         const opt1 = document.createElement("option");
         opt1.value = "grupa";
         opt1.innerText = "Grupa";
         const opt2 = document.createElement("option");
         opt2.value = "image";
         opt2.innerText = "Image";
-        this.Select.options.add(opt1);
-        this.Select.options.add(opt2);
-        this.Select.appendChild(opt1);
-        this.appendChild(this.Select);
+        this.options.add(opt1);
+        this.options.add(opt2);
         this.className = "select";
+        this.setAttribute("is", "select-moj");
     }
 }
 class Rect extends HTMLElement
@@ -60,7 +58,7 @@ class Rect extends HTMLElement
         console.log("Hello");
         console.log(this.Select);
 
-        switch(this.Select.Select.value) {
+        switch(this.Select.value) {
             case 'image':
                 const image = document.createElement("group-image");
                 this.parentElement.appendChild(image);
@@ -185,7 +183,9 @@ class Image extends HTMLElement
 }
 
 
-customElements.define("select-moj", Select);
+customElements.define("select-moj", Select,{
+    extends: 'select'
+  });
 customElements.define("rect-select", Rect);
 customElements.define("group-image", Image);
 customElements.define("image-properties", ImageProperties);

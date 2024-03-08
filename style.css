@@ -66,11 +66,8 @@ rect-select.AddElement {
 rect-select.AddElement:hover {
     background-color: rgb(20, 164, 164);
 }
-select-moj {
-    display:block;
-    width:100%;
-}
-select-moj select {
+
+grupa-select select{
     width:100%;
 }
 group-image {
