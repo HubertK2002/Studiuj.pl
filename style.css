@@ -1,0 +1,115 @@
+table
+{
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+}
+td
+{
+    border: 2px solid black;
+    padding: 5px;
+}
+td.edit
+{
+    padding: 0px;
+}
+textarea
+{
+    padding:3px;
+    vertical-align: middle;
+}
+div.notatka
+{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+pre.editable
+{
+    padding: 3px;
+    border: 2px solid black;
+    overflow-x: auto;
+}
+
+div#wybor
+{
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    background: lightgray;
+    border: black solid 2px;
+    padding: 5px;
+}
+
+grupa-select.select {
+    border: 2px black solid;
+    padding: 5px;
+    min-width: 400px;
+    max-width: 500px;
+    display:flex;
+    flex-wrap: wrap;
+    gap:1%;
+    row-gap: 3px;
+}
+rect-select {
+    display:block;
+    width: 24%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+}
+
+rect-select.AddElement {
+    background-color: aqua;
+}
+rect-select.AddElement:hover {
+    background-color: rgb(20, 164, 164);
+}
+select-moj {
+    display:block;
+    width:100%;
+}
+select-moj select {
+    width:100%;
+}
+group-image {
+    width: 24%;
+    background-color: aqua;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 50px;
+}
+input[type="file"] {
+    display:none;
+
+}
+.custom-file-upload {
+    width: 100%;
+    background-color: aqua;
+    background-size: cover; /* lub 'contain', zależnie od potrzeb */
+    background-position: center;
+}
+.custom-file-upload:hover{
+    background-color: rgb(20, 164, 164);
+}
+.dragging {
+    background-color: rgb(20, 164, 164);
+}
+
+image-properties {
+    position: fixed;
+    display:block;
+    width: 50%;
+    height: 50%;
+    top:25%;
+    left: 25%;
+    background-color: lightgrey;
+    padding: 5%;
+    border: outset;
+    flex-direction: column;
+    gap: 15px;
+
+}
