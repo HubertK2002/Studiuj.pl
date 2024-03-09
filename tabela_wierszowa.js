@@ -15,6 +15,7 @@ class TableNote extends HTMLDivElement {
         super();
     }
     connectedCallback() {
+        console.log("TableNote");
        if(this.CreatedInJs) this.create();
        else window.addEventListener('DOMContentLoaded', () => {
         this.connect();
@@ -54,6 +55,7 @@ class EditTable extends HTMLTableElement {
 
     }
     connectedCallback() {
+        console.log("tabela");
         if(this.CreatedInJs) this.create();
         else window.addEventListener('DOMContentLoaded', () => {
             this.connect();
@@ -68,6 +70,7 @@ class EditTable extends HTMLTableElement {
         this.appendChild(this.Body);
     }
     connect() {
+        console.log("Hello");
         this.Head = this.querySelector("thead");
         this.Body = this.querySelector("tbody");
     }
@@ -164,6 +167,7 @@ class DodajNaglowek extends HTMLButtonElement {
         super();
     }
     connectedCallback() {
+        console.log("Nagłówek");
         if(this.CreatedInJs) this.create();
         else window.addEventListener('DOMContentLoaded', () => {
             this.connect();
@@ -180,7 +184,7 @@ class DodajNaglowek extends HTMLButtonElement {
     connect() {
         this.Table = this.closest('div[is="table-note"]');
         this.Input = this.Table.Input;
-        console.log(this.Table.Tabela.Head);
+        console.log(this.Table);
         this.Headers = this.Table.Tabela.Head.Wiersz;
         this.addEventListener("click", (event) => this.dodaj_naglowek(event));
     }

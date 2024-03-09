@@ -1,5 +1,6 @@
-import * as myImport from '/studia/definicja.js';
 //import * as ta from '/studia/tabela_wierszowa.js';
+import * as myImport from '/studia/definicja.js';
+
 
 export function DodajNotatke()
 {
@@ -21,7 +22,7 @@ export function DodajNotatke()
           case 'grupa':
             console.log("grupa");
             const grupa = document.createElement("grupa-select");
-            pojemnik.appendChild(grupa);
+            notatki.appendChild(grupa);
     }
     //notatki.appendChild(pojemnik);
     window.scrollTo(0, document.body.scrollHeight);

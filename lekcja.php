@@ -30,9 +30,9 @@ echo "<br>";
 ?>
 <html>
 <head>
-<script src="tabela_wierszowa.js?v=5"></script>
-<script src="notatki.js?v=6" type="module"></script>
-<script src="grupa.js?v=8" type="module"></script>
+<script src="tabela_wierszowa.js"></script>
+<script src="grupa.js?v=8"></script>
+<script src="notatki.js?v=7" type="module" defer></script>
 <link rel="stylesheet" href="style.css?ver=10">
 </head>
 <body>

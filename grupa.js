@@ -1,6 +1,4 @@
-import * as myImport from '/studia/test.js';
-console.log(myImport);
-myImport.test();
+
 class Grupa extends HTMLElement
 {
     constructor() {
