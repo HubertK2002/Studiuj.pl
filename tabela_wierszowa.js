@@ -27,13 +27,14 @@ class TableNote extends HTMLDivElement {
         this.DodajNaglowek = createElement("button", "dodaj-naglowek");
         this.DodajWiersz = createElement("button", "dodaj-wiersz");
         this.Input = document.createElement("input");
+        this.ControlPanel = document.createElement("div");
 
         this.className = "notatka";
-        this.appendChild(this.Input);
-        this.appendChild(this.Tabela);
-        this.appendChild(this.DodajNaglowek);
-        this.appendChild(this.DodajWiersz);
-        
+        this.appendChild(this.Tabela);  
+        this.appendChild(this.ControlPanel);
+        this.ControlPanel.appendChild(this.Input); 
+        this.ControlPanel.appendChild(this.DodajNaglowek);
+        this.ControlPanel.appendChild(this.DodajWiersz);     
     }
 
     connect() {
@@ -67,7 +68,7 @@ class EditTable extends HTMLTableElement {
         this.appendChild(this.Body);
     }
     connect() {
-        this.Head = this.children[0];
+        this.Head = this.querySelector("thead");
         this.Body = this.querySelector("tbody");
     }
 }
@@ -131,14 +132,15 @@ class DodajWiersz extends HTMLButtonElement {
     create() {
         this.setAttribute("is", "dodaj-wiersz");
         this.innerHTML = "Dodaj Wiersz";
-        this.Table = this.parentElement.Tabela;
+        this.Table = this.closest('div[is="table-note"]').Tabela;
+        console.log(this.Table);
         this.Wiersze = this.Table.Body;
         this.Headers = this.Table.Head.Wiersz;
         this.addEventListener("click", (event) => this.dodaj_wiersz(event));
     }
 
     connect() {
-        this.Table = this.parentElement.Tabela;
+        this.Table = this.closest('div[is="table-note"]').Tabela;
         this.Wiersze = this.Table.Body;
         this.Headers = this.Table.Head.Wiersz;
         this.addEventListener("click", (event) => this.dodaj_wiersz(event));
@@ -169,16 +171,16 @@ class DodajNaglowek extends HTMLButtonElement {
     }
     create() {
         this.setAttribute("is", "dodaj-naglowek");
-        console.log(this.parentElement.Tabela.Head);
-        this.Table = this.parentElement;
+        this.Table = this.closest('div[is="table-note"]');
         this.Input = this.Table.Input;
         this.Headers = this.Table.Tabela.Head.Wiersz;
         this.innerText = "Dodaj nagłówek";
         this.addEventListener("click", (event) => this.dodaj_naglowek(event));
     }
     connect() {
-        this.Table = this.parentElement;
+        this.Table = this.closest('div[is="table-note"]');
         this.Input = this.Table.Input;
+        console.log(this.Table.Tabela.Head);
         this.Headers = this.Table.Tabela.Head.Wiersz;
         this.addEventListener("click", (event) => this.dodaj_naglowek(event));
     }
@@ -186,7 +188,6 @@ class DodajNaglowek extends HTMLButtonElement {
     {
         event.preventDefault();  
         const td = document.createElement("td");
-        console.log(this.Table.Input);
         const Title = document.createTextNode(this.Table.Input.value);
         this.Input.value = "";
         td.appendChild(Title);
