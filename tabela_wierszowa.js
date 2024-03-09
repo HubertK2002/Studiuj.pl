@@ -220,6 +220,7 @@ class EditCell extends HTMLTableCellElement {
         const Child = this.children[0];
         if(Child.tagName == 'P')  this.addEventListener("click", () => this.edit());
         else Child.addEventListener("focusout", () => this.finish(Child));
+        this.addEventListener("click", () => this.edit());
     }
     edit()
     {
