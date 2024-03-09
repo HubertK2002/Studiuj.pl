@@ -1,4 +1,5 @@
 function createElement(element, type) {
+    console.log("dwa");
     const el = document.createElement(element, type);
     el.CreatedInJs = true;
     return el;

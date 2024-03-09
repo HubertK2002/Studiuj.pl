@@ -1,19 +1,42 @@
 
+function createElement(element) {
+    console.log("jeden");
+    const el = document.createElement(element);
+    el.CreatedInJs = true;
+    return el;
+}
+function createElement(element, type) {
+    console.log("dwa");
+    const el = document.createElement(element, type);
+    el.CreatedInJs = true;
+    return el;
+}
 class Grupa extends HTMLElement
 {
     constructor() {
         super();
-        
-        //this.className="Group";
-        //this.appendChild(AddElementRect());
     }
     connectedCallback() {
-        const sel = document.createElement("select","select-moj");
+        if(this.CreatedInJs) this.create();
+        else window.addEventListener('DOMContentLoaded', () => {
+            this.connect();
+        });
+    }
+    create() {
+        const sel = createElement("select","select-moj");
         this.appendChild(sel);
-        const rect = document.createElement("rect-select");
+        const rect = createElement("rect-select");
         rect.Init123(sel);
         this.appendChild(rect);
         this.className = "select";
+    }
+    connect() {
+        this.Sel = this.querySelector("select[is='select-moj']");
+        console.log(this.Sel);
+        console.log("To był select");
+        this.Rect = this.querySelector("rect-select");
+        console.log(this.Rect);
+        this.Rect.Init123(this.Sel);
     }
 
 }
@@ -23,7 +46,12 @@ class Select extends HTMLSelectElement
         super();
     }
     connectedCallback() {
-        //this.Select = document.createElement("select");
+        if(this.CreatedInJs) this.create();
+        else window.addEventListener('DOMContentLoaded', () => {
+            this.connect();
+        });
+    }
+    create() {
         const opt1 = document.createElement("option");
         opt1.value = "grupa";
         opt1.innerText = "Grupa";
@@ -35,6 +63,9 @@ class Select extends HTMLSelectElement
         this.className = "select";
         this.setAttribute("is", "select-moj");
     }
+    connect() {
+
+    }
 }
 class Rect extends HTMLElement
 {
@@ -44,6 +75,12 @@ class Rect extends HTMLElement
         this.addEventListener("click", () => this.click());
     }
     connectedCallback() {
+        if(this.CreatedInJs) this.create();
+        else window.addEventListener('DOMContentLoaded', () => {
+            this.connect();
+        });
+    }
+    create() {
         const div = document.createElement("div");
         this.className = "AddElement";
         const p = document.createElement("p");
@@ -51,21 +88,28 @@ class Rect extends HTMLElement
         div.appendChild(p);
         this.appendChild(div);
     }
+    connect() {
+        //this.Select = this.closest("select");
+    }
     click()
     {
         console.log("Hello");
-        console.log(this.Select);
+        console.log(this.Select.value);
 
         switch(this.Select.value) {
             case 'image':
-                const image = document.createElement("group-image");
+                const image = createElement("group-image");
                 this.parentElement.appendChild(image);
                 break;
             case 'grupa':
-                const grupa = document.createElement("grupa-select");
+                console.log("Grupa");
+                const grupa = createElement("grupa-select");
                 this.parentElement.appendChild(grupa);
+                console.log("dalej dzialam");
+                break;
             default:
-                console.log(this.Select.Select.value);
+                console.log("default");
+                console.log(this.Select.value);
         }
        
     }
@@ -83,6 +127,12 @@ class ImageProperties extends HTMLElement {
         console.log("Prop");
     }
     connectedCallback() {
+        if(this.CreatedInJs) this.create();
+        else window.addEventListener('DOMContentLoaded', () => {
+            this.connect();
+        });
+    }
+    create() {
         console.log("Prop");
         const nazwa = document.createElement("input");
         nazwa.type = "text";
@@ -91,11 +141,19 @@ class ImageProperties extends HTMLElement {
         this.style.display = "none";
         const button = document.createElement("button");
         button.innerText = "Zamknij";
+        button.name = "zamknij";
         button.addEventListener("click", (event) => {
             event.preventDefault(); 
             this.style.display = "none";
         })
         this.appendChild(button);
+    }
+    connect() {
+        this.Zamknij = this.querySelector("button[name='zamknij']");
+        this.Zamknij.addEventListener("click", (event) => {
+            event.preventDefault(); 
+            this.style.display = "none";
+        })
     }
 }
 
@@ -106,6 +164,12 @@ class Image extends HTMLElement
         super();
     }
     connectedCallback() {
+        if(this.CreatedInJs) this.create();
+        else window.addEventListener('DOMContentLoaded', () => {
+            this.connect();
+        });
+    }
+    create() {
         const label = document.createElement("label");
         label.className = "custom-file-upload";
         const input = document.createElement("input");
@@ -123,10 +187,19 @@ class Image extends HTMLElement
         label.appendChild(p);
         //label.textContent = "Wybierz plik";
         this.appendChild(label);
-        this.Properties = document.createElement("image-properties");
+        this.Properties = createElement("image-properties");
         this.appendChild(this.Properties);
     }
-
+    connect() {
+        this.Label = this.querySelector("label");
+        this.Label.addEventListener('dragenter', (event) => this.dragstart(label));
+        this.Label.addEventListener('dragleave', (event) => this.dragleave(label));
+        this.Label.addEventListener('drop', (event) => this.drop(event, label), false);
+        this.Label.addEventListener('dragover', (event) => {event.preventDefault();}, false);
+        this.Label.addEventListener('click', (event) => this.click(event));
+        this.Input = this.querySelector("input");
+        this.Input.addEventListener('change', (event) => this.fileChange(event,label));
+    }
     click(event) {
         this.Properties.style.display = "flex";
         event.preventDefault();

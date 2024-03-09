@@ -21,7 +21,7 @@ export function DodajNotatke()
             break;
           case 'grupa':
             console.log("grupa");
-            const grupa = document.createElement("grupa-select");
+            const grupa = createElement("grupa-select");
             notatki.appendChild(grupa);
     }
     //notatki.appendChild(pojemnik);
