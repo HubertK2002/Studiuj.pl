@@ -31,11 +31,29 @@ echo "<br>";
 <html>
 <head>
 <script src="tabela_wierszowa.js?v=5"></script>
-<script src="notatki.js?v=5"></script>
+<script src="notatki.js?v=6" type="module"></script>
 <script src="grupa.js?v=8" type="module"></script>
 <link rel="stylesheet" href="style.css?ver=10">
 </head>
 <body>
+<script type="module">
+    console.log("Hello");
+    import {DodajNotatke} from  './notatki.js';
+    console.log(DodajNotatke);
+    window.DodajNotatke = () => {
+        DodajNotatke();
+    }
+    window.Zapisz = () => {
+        const notatki = document.getElementById("notatki");
+        const inputs = document.getElementById("inputs");
+        const new_input = document.createElement("input");
+        new_input.type = "hidden";
+        new_input.name = "notatki";
+        new_input.value = notatki.innerHTML;
+        inputs.appendChild(new_input);
+    
+    }
+</script>
 <h1 id="msg"></h1>
 <?php
     if(isset($_POST['zapisz'])) {
