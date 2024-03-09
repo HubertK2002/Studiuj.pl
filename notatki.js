@@ -18,7 +18,7 @@ function DodajNotatke()
         return;
     }
     pojemnik.className = "notatka";
-    inputs.appendChild(new_input);
+    //inputs.appendChild(new_input);
     console.log(inputs);
     const title = document.createElement("h2");
     title.innerHTML = name;
@@ -27,7 +27,10 @@ function DodajNotatke()
     switch(rodzaj)
     {
         case 'tabela wierszowa':
-            const input = document.createElement("input");
+            const TableNote = document.createElement("div", "table-note");
+            TableNote.CreatedInJs = true;
+            notatki.appendChild(TableNote);
+            /*const input = document.createElement("input");
             input.type = "text";
             input.id = name;
             input.setAttribute("name","naglowek");
@@ -35,7 +38,7 @@ function DodajNotatke()
 
             //PRZYCISKI
             const naglowek = document.createElement("button");
-            naglowek.innerHTML ="Dodaj nagłówek";
+            naglowek.innerHTML =
             naglowek.onclick = (event) => dodaj_naglowek(name, event);
             pojemnik.appendChild(naglowek);
             const wiersz = document.createElement("button");
@@ -63,7 +66,7 @@ function DodajNotatke()
             const akceptuj = document.createElement("button");
             akceptuj.innerHTML ="Akceptuj tabelę";
             akceptuj.onclick = (event) => akceptuj_tabele(name, pojemnik, event);
-            pojemnik.appendChild(akceptuj);
+            pojemnik.appendChild(akceptuj);*/
 
             break;
         case 'definicja':
@@ -82,7 +85,7 @@ function DodajNotatke()
             const grupa = document.createElement("grupa-select");
             pojemnik.appendChild(grupa);
     }
-    notatki.appendChild(pojemnik);
+    //notatki.appendChild(pojemnik);
     new_input.value = pojemnik.innerHTML;
     window.scrollTo(0, document.body.scrollHeight);
     
@@ -183,4 +186,14 @@ function DefinicjaOnInput(element)
     height += element.scrollHeight;
     element.style.height = "5px";
     element.style.height = (element.scrollHeight + 5) + "px";
+}
+
+function Zapisz() {
+  const notatki = document.getElementById("notatki");
+  const inputs = document.getElementById("inputs");
+  const new_input = document.createElement("input");
+    new_input.type = "hidden";
+    new_input.name = "notatki";
+    new_input.value = notatki.innerHTML;
+    inputs.appendChild(new_input);
 }

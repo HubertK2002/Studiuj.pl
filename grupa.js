@@ -22,7 +22,7 @@ class Grupa extends HTMLElement
 class Select extends HTMLSelectElement
 {
     constructor() {
-        self = super();
+        super();
     }
     connectedCallback() {
         //this.Select = document.createElement("select");

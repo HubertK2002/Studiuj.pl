@@ -30,19 +30,22 @@ echo "<br>";
 ?>
 <html>
 <head>
-<script src="tabela_wierszowa.js?v=3"></script>
-<script src="notatki.js?v=4"></script>
+<script src="tabela_wierszowa.js?v=4"></script>
+<script src="notatki.js?v=5"></script>
 <script src="grupa.js?v=8" type="module"></script>
-<link rel="stylesheet" href="style.css?ver=9">
+<link rel="stylesheet" href="style.css?ver=10">
 </head>
 <body>
 <h1 id="msg"></h1>
 <?php
     if(isset($_POST['zapisz'])) {
+        $value = $_POST['notatki'];
         //print_r($_POST['notatki']);
-        foreach($_POST['notatki'] as $value) {
-            DB::exec("insert into `$lekcja` (id, odpowiedz) values (null, '$value')");
-        }
+        //foreach($_POST['notatki'] as $value) {
+          //  DB::exec("insert into `$lekcja` (id, odpowiedz) values (null, '$value')");
+        //}
+        DB::exec("delete from `$lekcja`");
+        DB::exec("insert into `$lekcja` (id, odpowiedz) values (null, '$value')")
         ?>
         <form id="redirectForm" method="post" action="lekcja.php">
         <input type="hidden" name="dzial" value="<?php echo $dzial?>" />
@@ -88,7 +91,7 @@ Wybierz rodzaj notatki
         ?>
     </div>
 
-    <button>Zapisz</button>
+    <button onclick="Zapisz()">Zapisz</button>
 </form>
 <label class="custom-file-upload">
     <input type="file"/>
