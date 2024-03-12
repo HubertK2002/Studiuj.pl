@@ -71,6 +71,11 @@ rect-select.AddElement:hover {
 grupa-select select{
     width:100%;
 }
+grupa-select h2 {
+    width:100%;
+    text-align: center;
+    margin: 0;
+}
 group-image {
     width: 24%;
     background-color: aqua;

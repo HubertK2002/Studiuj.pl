@@ -11,6 +11,11 @@ class Definicja extends HTMLDivElement {
     }
 
     create() {
+        const title = document.getElementById("nazwa_notatki").value;
+        this.Title = document.createElement("h2");
+        this.Title.innerText = title;
+        this.Title.contentEditable = true;
+        this.appendChild(this.Title);
         this.TextArea = document.createElement("pre");
         this.TextArea.contentEditable = true;
         this.TextArea.classList += "editable";

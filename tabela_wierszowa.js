@@ -31,6 +31,12 @@ class TableNote extends HTMLDivElement {
         this.Input = document.createElement("input");
         this.ControlPanel = document.createElement("div");
 
+        const title = document.getElementById("nazwa_notatki").value;
+        this.Title = document.createElement("h2");
+        this.Title.innerText = title;
+        this.Title.contentEditable = true;
+        this.appendChild(this.Title);
+
         this.className = "notatka";
         this.appendChild(this.Tabela);  
         this.appendChild(this.ControlPanel);

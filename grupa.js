@@ -27,6 +27,11 @@ class Grupa extends HTMLElement
     create() {
         const sel = createElement("select","select-moj");
         this.appendChild(sel);
+        const title = document.getElementById("nazwa_notatki").value;
+        this.Title = document.createElement("h2");
+        this.Title.innerText = title;
+        this.Title.contentEditable = true;
+        this.appendChild(this.Title);
         const rect = createElement("rect-select");
         rect.Init123(sel);
         this.appendChild(rect);
