@@ -111,9 +111,5 @@ Wybierz rodzaj notatki
 
     <button onclick="Zapisz()">Zapisz</button>
 </form>
-<label class="custom-file-upload">
-    <input type="file"/>
-    Custom Upload
-</label>
 </body>
 </html>

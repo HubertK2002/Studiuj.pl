@@ -5,12 +5,14 @@ function createElement(element) {
     el.CreatedInJs = true;
     return el;
 }
+
 function createElement(element, type) {
     console.log("dwa");
     const el = document.createElement(element, type);
     el.CreatedInJs = true;
     return el;
 }
+
 class Grupa extends HTMLElement
 {
     constructor() {
@@ -192,13 +194,14 @@ class Image extends HTMLElement
     }
     connect() {
         this.Label = this.querySelector("label");
-        this.Label.addEventListener('dragenter', (event) => this.dragstart(label));
-        this.Label.addEventListener('dragleave', (event) => this.dragleave(label));
-        this.Label.addEventListener('drop', (event) => this.drop(event, label), false);
+        this.Label.addEventListener('dragenter', (event) => this.dragstart(this.Label));
+        this.Label.addEventListener('dragleave', (event) => this.dragleave(this.Label));
+        this.Label.addEventListener('drop', (event) => this.drop(event, this.Label), false);
         this.Label.addEventListener('dragover', (event) => {event.preventDefault();}, false);
         this.Label.addEventListener('click', (event) => this.click(event));
         this.Input = this.querySelector("input");
-        this.Input.addEventListener('change', (event) => this.fileChange(event,label));
+        this.Input.addEventListener('change', (event) => this.fileChange(event,this.Label));
+        this.Properties = this.querySelector("image-properties");
     }
     click(event) {
         this.Properties.style.display = "flex";
