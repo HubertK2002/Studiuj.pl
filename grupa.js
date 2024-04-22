@@ -1,13 +1,11 @@
 
 function createElement(element) {
-    console.log("jeden");
     const el = document.createElement(element);
     el.CreatedInJs = true;
     return el;
 }
 
 function createElement(element, type) {
-    console.log("dwa");
     const el = document.createElement(element, type);
     el.CreatedInJs = true;
     return el;
@@ -15,6 +13,7 @@ function createElement(element, type) {
 
 class Grupa extends HTMLElement
 {
+    Type = "Grupa";
     constructor() {
         super();
     }
@@ -39,16 +38,33 @@ class Grupa extends HTMLElement
     }
     connect() {
         this.Sel = this.querySelector("select[is='select-moj']");
-        console.log(this.Sel);
-        console.log("To był select");
         this.Rect = this.querySelector("rect-select");
-        console.log(this.Rect);
         this.Rect.Init123(this.Sel);
+        this.Title = this.querySelector("h2");
     }
-
+    getData() {
+        return {
+            'Grupa': {
+                'Title': this.Title.innerText,
+                'Children': this.getChildrenData()
+            }
+        };
+    }
+    getChildrenData() {
+        let Children = this.children;
+        let ChildrenData = Array();
+        for(let child of Children) {
+            if(!child.hasOwnProperty("Type") || child.Type == "Select" || child.Type == "Rect") {
+                continue;
+            }
+            ChildrenData.push(child.getData());
+        }
+        return ChildrenData;
+    }
 }
 class Select extends HTMLSelectElement
 {
+    Type = "Select";
     constructor() {
         super();
     }
@@ -77,6 +93,7 @@ class Select extends HTMLSelectElement
 class Rect extends HTMLElement
 {
     Select;
+    Type="Rect";
     constructor() {
         super();
         this.addEventListener("click", () => this.click());
@@ -100,30 +117,22 @@ class Rect extends HTMLElement
     }
     click()
     {
-        console.log("Hello");
-        console.log(this.Select.value);
-
         switch(this.Select.value) {
             case 'image':
                 const image = createElement("group-image");
                 this.parentElement.appendChild(image);
                 break;
             case 'grupa':
-                console.log("Grupa");
                 const grupa = createElement("grupa-select");
                 this.parentElement.appendChild(grupa);
-                console.log("dalej dzialam");
                 break;
             default:
-                console.log("default");
-                console.log(this.Select.value);
         }
        
     }
 
     Init123 = function (Sel) {
         this.Select = Sel;
-        console.log(Sel);
     }
 }
 
@@ -131,7 +140,9 @@ class ImageProperties extends HTMLElement {
     Image;
     constructor() {
         super();
-        console.log("Prop");
+        this.Nazwa = document.createElement("input");
+        this.Nazwa.type = "text";
+        this.Nazwa.placeholder = "Podaj nazwę";
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
@@ -139,12 +150,8 @@ class ImageProperties extends HTMLElement {
             this.connect();
         });
     }
-    create() {
-        console.log("Prop");
-        const nazwa = document.createElement("input");
-        nazwa.type = "text";
-        nazwa.placeholder = "Podaj nazwę";
-        this.appendChild(nazwa);
+    create() {      
+        this.appendChild(this.Nazwa);
         this.style.display = "none";
         const button = document.createElement("button");
         button.innerText = "Zamknij";
@@ -162,39 +169,30 @@ class ImageProperties extends HTMLElement {
             this.style.display = "none";
         })
     }
+    setTitle(title) {
+        
+    }
 }
 
 class Image extends HTMLElement
 {
     Properties;
+    Type = "Image";
     constructor() {
         super();
+        this.Label = createElement("label","file-label");
+        this.Properties = createElement("image-properties");
+       
     }
     connectedCallback() {
+        this.className = "AddElement";
         if(this.CreatedInJs) this.create();
         else window.addEventListener('DOMContentLoaded', () => {
             this.connect();
         });
     }
-    create() {
-        const label = document.createElement("label");
-        label.className = "custom-file-upload";
-        const input = document.createElement("input");
-        input.type="file";
-        input.addEventListener('change', (event) => this.fileChange(event,label));
-        label.addEventListener('dragenter', (event) => this.dragstart(label));
-        label.addEventListener('dragleave', (event) => this.dragleave(label));
-        label.addEventListener('drop', (event) => this.drop(event, label), false);
-        label.addEventListener('dragover', (event) => {event.preventDefault();}, false);
-        label.addEventListener('click', (event) => this.click(event));
-        this.className = "AddElement";
-        label.appendChild(input);
-        const p = document.createElement("p");
-        p.innerText = "Wybierz plik"
-        label.appendChild(p);
-        //label.textContent = "Wybierz plik";
-        this.appendChild(label);
-        this.Properties = createElement("image-properties");
+    create() {  
+        this.appendChild(this.Label);
         this.appendChild(this.Properties);
     }
     connect() {
@@ -208,39 +206,23 @@ class Image extends HTMLElement
         this.Input.addEventListener('change', (event) => this.fileChange(event,this.Label));
         this.Properties = this.querySelector("image-properties");
     }
-    click(event) {
-        this.Properties.style.display = "flex";
-        event.preventDefault();
+
+    getData() {
+        return {
+            'Image': {
+                'Image': this.getImage(),
+                'Title': 'Testowy tytuł'
+            }
+        };
     }
 
-    dragstart(label) {
-        console.log("drag");
-        label.classList.add("dragging");
-    }
-    dragleave(label) {
-        console.log("leave");
-        label.classList.remove("dragging");
-    }
-    drop(e, label) {
-        console.log("drop");
-        e.preventDefault();
-        e.stopPropagation();
-        this.dragleave(label);
-        let dt = e.dataTransfer;
-        let file = dt.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-    
-            reader.onload = (e) => {
-                label.style.backgroundImage = `url('${e.target.result}')`;
-            };
-    
-            reader.readAsDataURL(file);
-          } else {
-            alert('Please select a valid image file.');
-            //fileInput.value = ''; // Clear the input to allow selecting the same file again
-          }
-        
+    getImage() {
+        const img = /"(.*?)"/
+        if(this.Label.style != "undefined") {
+            return this.Label.style.backgroundImage != '' ?
+            this.Label.style.backgroundImage.match(img)[1] : '';
+        }
+        return '';
     }
 
     fileChange(event, destination) {
@@ -262,6 +244,70 @@ class Image extends HTMLElement
 }
 
 
+class FileLabel extends HTMLLabelElement {
+    constructor() {
+        super();
+
+        this.addEventListener('dragenter', (event) => this.dragstart(label));
+        this.addEventListener('dragleave', (event) => this.dragleave(label));
+        this.addEventListener('drop', (event) => this.drop(event, label), false);
+        this.addEventListener('dragover', (event) => {event.preventDefault();}, false);
+        this.addEventListener('click', (event) => this.click(event));
+        this.className = "custom-file-upload";
+        this.Input = createElement("input","file-input");
+        this.Note = document.createElement("p");
+        this.Note.innerText = "Wybierz plik";
+    }
+
+    connectedCallback() {
+        this.appendChild(this.Input);
+        this.appendChild(this.Note);
+    }
+
+    click(event) {
+        this.parentElement.Properties.style.display = "flex";
+        event.preventDefault();
+    }
+    dragstart() {
+        this.classList.add("dragging");
+    }
+    dragleave() {
+        this.classList.remove("dragging");
+    }
+    drop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.dragleave();
+        let dt = e.dataTransfer;
+        let file = dt.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+    
+            reader.onload = (e) => {
+                label.style.backgroundImage = `url('${e.target.result}')`;
+            };
+    
+            reader.readAsDataURL(file);
+          } else {
+            alert('Please select a valid image file.');
+            //fileInput.value = ''; // Clear the input to allow selecting the same file again
+          }
+        
+    }
+}
+
+class FileInput extends HTMLInputElement {
+    constructor() {
+        super();
+        this.type="file";
+    }
+
+    connectedCallback() {
+
+    }
+}
+
+
 customElements.define("select-moj", Select,{
     extends: 'select'
   });
@@ -269,3 +315,9 @@ customElements.define("rect-select", Rect);
 customElements.define("group-image", Image);
 customElements.define("image-properties", ImageProperties);
 customElements.define("grupa-select", Grupa);
+customElements.define("file-label", FileLabel, {
+    extends: 'label'
+});
+customElements.define("file-input", FileInput, {
+    extends: 'input'
+})

@@ -1,5 +1,4 @@
 function createElement(element, type) {
-    console.log("dwa");
     const el = document.createElement(element, type);
     el.CreatedInJs = true;
     return el;
@@ -52,6 +51,15 @@ class TableNote extends HTMLDivElement {
         this.Input = this.querySelector('input');
     }
 
+    getData() {
+        return {
+            'Table': {
+                'Table': this.Tabela.getData(),
+                'Title': this.Title.innerHTML
+            }
+        };
+    }
+
 }
 
 class EditTable extends HTMLTableElement {
@@ -81,12 +89,18 @@ class EditTable extends HTMLTableElement {
         this.Head = this.querySelector("thead");
         this.Body = this.querySelector("tbody");
     }
+
+    getData() {
+        return {
+            'Head': this.Head.getData(),
+            'Body': this.Body.getData()
+        };
+    }
 }
 class TableHead extends HTMLTableSectionElement {
     Wiersz;
     constructor() {
         super();
-        
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
@@ -103,6 +117,15 @@ class TableHead extends HTMLTableSectionElement {
     connect() {
         this.Wiersz = this.querySelector("tr");
     }
+
+    getData() {
+        let data = Array();
+        let tds = this.Wiersz.querySelectorAll("td");
+        tds.forEach(element => {
+            data.push(element.innerHTML);
+        });
+        return data;
+    }
 }
 
 class TableBody extends HTMLTableSectionElement {
@@ -111,6 +134,20 @@ class TableBody extends HTMLTableSectionElement {
     }
     connectedCallback() {
         this.setAttribute("is", "table-body");
+    }
+    
+    getData() {
+        let RowsData = Array();
+        let Rows = this.querySelectorAll("tr");
+        Rows.forEach(Row => {
+            let CellsData = Array();
+            let Cells = Row.querySelectorAll("td");
+            Cells.forEach(Cell => {
+                CellsData.push(Cell.getValue());
+            });
+            RowsData.push(CellsData);
+        });
+        return RowsData;
     }
 }
 
@@ -228,6 +265,18 @@ class EditCell extends HTMLTableCellElement {
         else Child.addEventListener("focusout", () => this.finish(Child));
         this.addEventListener("click", () => this.edit());
     }
+
+    getValue() {
+        switch(this.className) {
+            case 'edit':
+                return this.querySelector("textarea").value;
+            case 'value':
+                return this.querySelector("p").innerHTML;
+            default:
+                return '';
+        }
+    }
+
     edit()
     {
         if(this.children[0].nodeName == "TEXTAREA") return;

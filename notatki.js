@@ -10,18 +10,20 @@ export function DodajNotatke()
         case 'tabela wierszowa':
             const TableNote = document.createElement("div", "table-note");
             TableNote.CreatedInJs = true;
+            TableNote.setAttribute("new", "");
             notatki.appendChild(TableNote);
             break;
         case 'definicja':
-          console.log("It's me");
             const Definicja = document.createElement("div", "definicja-editable");
             Definicja.CreatedInJs = true;
+            Definicja.setAttribute("new", "");
             notatki.appendChild(Definicja);
-            console.log("It's me2");
             break;
           case 'grupa':
             console.log("grupa");
             const grupa = createElement("grupa-select");
+            grupa.CreatedInJs = true;
+            grupa.setAttribute("new","");
             notatki.appendChild(grupa);
     }
     //notatki.appendChild(pojemnik);

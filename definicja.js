@@ -1,7 +1,6 @@
 class Definicja extends HTMLDivElement {
     constructor() {
         super();
-        console.log("Definicja");
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
@@ -22,12 +21,23 @@ class Definicja extends HTMLDivElement {
         this.TextArea.addEventListener("keydown", (event) => this.DefinicjaKeyDown(event));
         this.TextArea.addEventListener("input", () => this.DefinicjaOnInput());
         this.appendChild(this.TextArea);
+        
     }
 
     connect() {
         this.TextArea = this.querySelector("pre");
         this.TextArea.addEventListener("keydown", (event) => this.DefinicjaKeyDown(event));
         this.TextArea.addEventListener("input", () => this.DefinicjaOnInput());
+        this.Title = this.querySelector("h2");
+    }
+
+    getData() {
+        return {
+            'Definition': {
+            'Title': this.Title.innerText,
+            'Definition': this.TextArea.innerText
+            }
+        };
     }
 
     DefinicjaClick(name)
@@ -38,9 +48,7 @@ class Definicja extends HTMLDivElement {
         const style = definicja.style
         textarea.style['width'] = style['width'];
         textarea.style['height'] = style['height'];
-        console.log("test1");
         textarea.addEventListener("keydown", (e) => DefinicjaKeyDown(name, e));
-        console.log("test1");
         textarea.addEventListener("oninput", (event) => DefinicjaOnInput(textarea));
         definicja.replaceWith(textarea);
         textarea.focus();
@@ -98,8 +106,6 @@ class Definicja extends HTMLDivElement {
 
     DefinicjaOnInput()
     {
-        console.log("test");
-        console.log(this.TextArea.scrollHeight);
         let height = this.TextArea.style.height;
         height += this.TextArea.scrollHeight;
         this.TextArea.style.height = "5px";

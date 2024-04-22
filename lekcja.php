@@ -1,37 +1,17 @@
 <?php
 require_once('db.php');
-DB::Init();
+require_once("lesson.php");
+
 $dzial = $_POST['dzial'];
 $lekcja = $_POST['lekcja'];
-$query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dzial'";
-$result = db::exec($query);
-if ($result && !mysqli_num_rows($result) > 0) {
-   $query = "CREATE DATABASE `$dzial` CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;";
-   db::exec($query);
-}
-else
-{
-    $query = "use `$dzial`";
-    db::exec($query);
-}
-DB::Init_db($dzial);
-
-DB::exec("CREATE table if not exists `$lekcja`(
-    id int not null primary key AUTO_INCREMENT,
-    pytanie text,
-    rodzaj_pytania text,
-    odpowiedz text
-    );");
-
-echo "<h2>$dzial</h2>";
-echo "<h3>$lekcja</h4>";
-echo "<br>";
-
+$lesson = new lesson($dzial, $lekcja);
+$lesson->print_title();
 ?>
+
 <html>
 <head>
 <script src="tabela_wierszowa.js"></script>
-<script src="grupa.js?v=8"></script>
+<script src="grupa.js?v=9"></script>
 <script src="notatki.js?v=7" type="module" defer></script>
 <link rel="stylesheet" href="style.css?ver=10">
 </head>
@@ -43,27 +23,84 @@ echo "<br>";
     window.DodajNotatke = () => {
         DodajNotatke();
     }
-    window.Zapisz = () => {
-        const notatki = document.getElementById("notatki");
-        const inputs = document.getElementById("inputs");
-        const new_input = document.createElement("input");
-        new_input.type = "hidden";
-        new_input.name = "notatki";
-        new_input.value = notatki.innerHTML;
-        inputs.appendChild(new_input);
-    
+    window.Zapisz = (event) => {
+        //event.preventDefault();
+        //console.log("Hello");
+        const notatki = document.querySelectorAll("[new]");
+        let NewData = Array();
+        for(let item of notatki)
+        {
+            NewData.push(item.getData());
+        }
+        let NewDataString = JSON.stringify(NewData);
+        const input = document.createElement("input");
+        input.type="hidden";
+        input.name="NewData";
+        input.value=NewDataString;
+        document.querySelector("form").appendChild(input);    
     }
 </script>
 <h1 id="msg"></h1>
 <?php
+
+    function parseNote($note) {
+        //print_r($note);
+        //echo $note->Grupa->Title . "<br><br>";
+        $obj = ( get_object_vars($note));
+        $type = array_keys($obj)[0];
+        $data = $note->$type;
+        switch($type) {
+            case 'Grupa':
+                $sql = "insert into struktury values (null, '{$data->Title}', 'Grupa', '{$_POST['lekcja']}')";
+                $structure_id = DB::exec($sql);
+                $ids = array();
+                echo $sql;
+                foreach($data->Children as $child) {
+                   $ids []= parseNote($child);
+                }
+                foreach ($ids as $id) {
+                
+                    $sql = "insert into grupy values (null, {$id['id']}, '{$id['type']}', $structure_id, '{$_POST['lekcja']}')";
+                    DB::exec($sql);
+                }
+                break;
+            case 'Image':
+                    //echo "<img src='$data->Image'>";
+                    $dir = "images/{$_POST['dzial']}/{$_POST['lekcja']}";
+                    if (!is_dir($dir)) {
+                        // dir doesn't exist, make it
+                        mkdir($dir, 0777, true);
+                      }
+                    $sql = "insert into images values (null, '{$data->Title}','{$_POST['lekcja']}')";
+                    $image = array();
+                    $image_id = DB::exec($sql);
+                    $image['id'] = $image_id;
+                    $image['type'] = "Image";
+                    file_put_contents("$dir/$image_id.png",$data->Image);
+                    echo $data->Title;
+                    return $image;
+                break;
+                default:
+                echo $type;
+            
+        }
+    }
     if(isset($_POST['zapisz'])) {
-        $value = $_POST['notatki'];
+        //$value = $_POST['notatki'];
+        
+        $array = json_decode($_POST['NewData']);
+        //if(count($_POST['NewData']) == 1) parseNote($_POST[])
+        foreach($array as $id => $note) {
+            parseNote($note);
+            //echo $data;
+        }
+       // print_r($_POST['NewData']);
         //print_r($_POST['notatki']);
         //foreach($_POST['notatki'] as $value) {
           //  DB::exec("insert into `$lekcja` (id, odpowiedz) values (null, '$value')");
         //}
-        DB::exec("delete from `$lekcja`");
-        DB::exec("insert into `$lekcja` (id, odpowiedz) values (null, '$value')")
+        //DB::exec("delete from `$lekcja`");
+        //DB::exec("insert into `$lekcja` (id, odpowiedz) values (null, '$value')")
         ?>
         <form id="redirectForm" method="post" action="lekcja.php">
         <input type="hidden" name="dzial" value="<?php echo $dzial?>" />
@@ -73,7 +110,7 @@ echo "<br>";
 
     <script type="text/javascript">
         // Automatyczne przesłanie formularza po załadowaniu strony
-        document.getElementById('redirectForm').submit();
+        //document.getElementById('redirectForm').submit();
     </script>
     <?php
     }
@@ -99,17 +136,11 @@ Wybierz rodzaj notatki
     </div>
     <div id="notatki">
         <?php
-        $lekcje = DB::exec("select * from `$lekcja`");
-        while($row=mysqli_fetch_assoc($lekcje)): ?>
-            <div class="notatka">
-                <?php  echo $row['odpowiedz']; ?>
-            </div>
-            <?php
-        endwhile
+            Parser::DownloadData($dzial,$lekcja);
         ?>
     </div>
 
-    <button onclick="Zapisz()">Zapisz</button>
+    <button onclick="Zapisz(event)">Zapisz</button>
 </form>
 </body>
 </html>
