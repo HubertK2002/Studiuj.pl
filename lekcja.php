@@ -51,7 +51,7 @@ $lesson->print_title();
         $data = $note->$type;
         switch($type) {
             case 'Grupa':
-                $sql = "insert into struktury values (null, '{$data->Title}', 'Grupa', '{$_POST['lekcja']}')";
+                $sql = "insert into struktury values (null, '{$data->Title}', 'Grupa', '{$_POST['lekcja']}', 1)";
                 $structure_id = DB::exec($sql);
                 $ids = array();
                 echo $sql;
@@ -71,13 +71,14 @@ $lesson->print_title();
                         // dir doesn't exist, make it
                         mkdir($dir, 0777, true);
                       }
-                    $sql = "insert into images values (null, '{$data->Title}','{$_POST['lekcja']}')";
+                      print_r($data);
+                    $sql = "insert into images values (null, '{$data->Properties->Title}','{$_POST['lekcja']}')";
                     $image = array();
                     $image_id = DB::exec($sql);
                     $image['id'] = $image_id;
                     $image['type'] = "Image";
                     file_put_contents("$dir/$image_id.png",$data->Image);
-                    echo $data->Title;
+                    echo $data->Properties->Title;
                     return $image;
                 break;
                 default:

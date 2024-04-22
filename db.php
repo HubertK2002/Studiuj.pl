@@ -15,13 +15,15 @@
         }
         public static function exec($query)
         {
-            return mysqli_query(DB::$conn, $query);
+            $res = mysqli_query(DB::$conn, $query);
+            if($res) $inserted_id []= DB::$conn->insert_id;
+            return $inserted_id[0];
         }
         public static function exec_many($queries) {
             $result = array();
             foreach($queries as $query) {
                 $res = DB::exec($query);
-                if($res) $result []= DB::$conn->insert_id;
+                if($res) $result []= $res;
             }
             return $result;
         }

@@ -120,11 +120,13 @@ class Rect extends HTMLElement
 
 class ImageProperties extends HTMLElement {
     Image;
+    Title;
     constructor() {
         super();
         this.Nazwa = document.createElement("input");
         this.Nazwa.type = "text";
         this.Nazwa.placeholder = "Podaj nazwę";
+        this.Nazwa.addEventListener("change", (event) => {this.Title = this.Nazwa.value;});
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
@@ -142,7 +144,12 @@ class ImageProperties extends HTMLElement {
         this.appendChild(button);
     }
     setTitle(title) {
-        
+        this.Title = title;
+    }
+    getData() {
+        return {
+            'Title': this.Title
+        }
     }
 }
 
@@ -169,7 +176,7 @@ class Image extends HTMLElement
         return {
             'Image': {
                 'Image': this.getImage(),
-                'Title': 'Testowy tytuł'
+                'Properties' : this.Properties.getData()
             }
         };
     }
