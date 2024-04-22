@@ -19,9 +19,6 @@ class Grupa extends HTMLElement
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
-        else window.addEventListener('DOMContentLoaded', () => {
-            this.connect();
-        });
     }
     create() {
         const sel = createElement("select","select-moj");
@@ -36,12 +33,7 @@ class Grupa extends HTMLElement
         this.appendChild(rect);
         this.className = "select";
     }
-    connect() {
-        this.Sel = this.querySelector("select[is='select-moj']");
-        this.Rect = this.querySelector("rect-select");
-        this.Rect.Init123(this.Sel);
-        this.Title = this.querySelector("h2");
-    }
+
     getData() {
         return {
             'Grupa': {
@@ -70,9 +62,6 @@ class Select extends HTMLSelectElement
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
-        else window.addEventListener('DOMContentLoaded', () => {
-            this.connect();
-        });
     }
     create() {
         const opt1 = document.createElement("option");
@@ -86,9 +75,7 @@ class Select extends HTMLSelectElement
         this.className = "select";
         this.setAttribute("is", "select-moj");
     }
-    connect() {
 
-    }
 }
 class Rect extends HTMLElement
 {
@@ -100,9 +87,6 @@ class Rect extends HTMLElement
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
-        else window.addEventListener('DOMContentLoaded', () => {
-            this.connect();
-        });
     }
     create() {
         const div = document.createElement("div");
@@ -112,9 +96,7 @@ class Rect extends HTMLElement
         div.appendChild(p);
         this.appendChild(div);
     }
-    connect() {
-        //this.Select = this.closest("select");
-    }
+
     click()
     {
         switch(this.Select.value) {
@@ -146,9 +128,6 @@ class ImageProperties extends HTMLElement {
     }
     connectedCallback() {
         if(this.CreatedInJs) this.create();
-        else window.addEventListener('DOMContentLoaded', () => {
-            this.connect();
-        });
     }
     create() {      
         this.appendChild(this.Nazwa);
@@ -161,13 +140,6 @@ class ImageProperties extends HTMLElement {
             this.style.display = "none";
         })
         this.appendChild(button);
-    }
-    connect() {
-        this.Zamknij = this.querySelector("button[name='zamknij']");
-        this.Zamknij.addEventListener("click", (event) => {
-            event.preventDefault(); 
-            this.style.display = "none";
-        })
     }
     setTitle(title) {
         
@@ -187,24 +159,10 @@ class Image extends HTMLElement
     connectedCallback() {
         this.className = "AddElement";
         if(this.CreatedInJs) this.create();
-        else window.addEventListener('DOMContentLoaded', () => {
-            this.connect();
-        });
     }
     create() {  
         this.appendChild(this.Label);
         this.appendChild(this.Properties);
-    }
-    connect() {
-        this.Label = this.querySelector("label");
-        this.Label.addEventListener('dragenter', (event) => this.dragstart(this.Label));
-        this.Label.addEventListener('dragleave', (event) => this.dragleave(this.Label));
-        this.Label.addEventListener('drop', (event) => this.drop(event, this.Label), false);
-        this.Label.addEventListener('dragover', (event) => {event.preventDefault();}, false);
-        this.Label.addEventListener('click', (event) => this.click(event));
-        this.Input = this.querySelector("input");
-        this.Input.addEventListener('change', (event) => this.fileChange(event,this.Label));
-        this.Properties = this.querySelector("image-properties");
     }
 
     getData() {
