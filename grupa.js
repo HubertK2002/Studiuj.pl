@@ -16,29 +16,30 @@ class Grupa extends HTMLElement
     Type = "Grupa";
     constructor() {
         super();
+        this.sel = createElement("select","select-moj");
+        this.Title = document.createElement("h2");
+        this.Title.contentEditable = true;
+        this.rect = createElement("rect-select");
+        this.rect.Init123(this.sel);
+        this.Title.innerText = document.getElementById("nazwa_notatki").value;
     }
     connectedCallback() {
-        if(this.CreatedInJs) this.create();
+        this.appendChild(this.sel);
+        this.appendChild(this.Title);
+        this.appendChild(this.rect);
+        this.className = "select";
+        
     }
     create() {
-        const sel = createElement("select","select-moj");
-        this.appendChild(sel);
-        const title = document.getElementById("nazwa_notatki").value;
-        this.Title = document.createElement("h2");
-        this.Title.innerText = title;
-        this.Title.contentEditable = true;
-        this.appendChild(this.Title);
-        const rect = createElement("rect-select");
-        rect.Init123(sel);
-        this.appendChild(rect);
-        this.className = "select";
+                
     }
 
     getData() {
         return {
             'Grupa': {
                 'Title': this.Title.innerText,
-                'Children': this.getChildrenData()
+                'Children': this.getChildrenData(),
+                'Root' : this.hasAttribute("root")
             }
         };
     }
@@ -52,6 +53,12 @@ class Grupa extends HTMLElement
             ChildrenData.push(child.getData());
         }
         return ChildrenData;
+    }
+
+    setTitle(title) {
+        console.log(title);
+        this.Title.innerText = title;
+        console.log(this.Title);
     }
 }
 class Select extends HTMLSelectElement
@@ -145,6 +152,7 @@ class ImageProperties extends HTMLElement {
     }
     setTitle(title) {
         this.Title = title;
+        this.Nazwa.value = title;
     }
     getData() {
         return {
@@ -204,6 +212,10 @@ class Image extends HTMLElement
             alert('Please select a valid image file.');
             fileInput.value = ''; // Clear the input to allow selecting the same file again
           }
+    }
+
+    setTitle(title) {
+        this.Properties.setTitle(title);
     }
     
 }

@@ -42,10 +42,13 @@
         switch(type) {
             case 'Grupa':
                 const grupa = document.createElement("grupa-select");
+                console.log(tag_data);
+                grupa.setTitle(tag_data['Title']);
                 grupa.CreatedInJs = true;
                 return grupa;
             case 'image':
                 const image = document.createElement("group-image");
+                image.setTitle(tag_data['title']);
                 image.CreatedInJs = true;
                 return image;
         }

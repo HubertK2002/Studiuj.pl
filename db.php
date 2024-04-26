@@ -28,6 +28,10 @@
             return $result;
         }
 
+        public static function sql_row($query) {
+            return mysqli_query(DB::$conn, $query);
+        }
+
         public static function sql($query) {
             $return = mysqli_query(DB::$conn, $query);
             $array = mysqli_fetch_all($return, MYSQLI_ASSOC);

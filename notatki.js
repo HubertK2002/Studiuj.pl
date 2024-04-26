@@ -11,12 +11,14 @@ export function DodajNotatke()
             const TableNote = document.createElement("div", "table-note");
             TableNote.CreatedInJs = true;
             TableNote.setAttribute("new", "");
+            TableNote.setAttribute("root", "");
             notatki.appendChild(TableNote);
             break;
         case 'definicja':
             const Definicja = document.createElement("div", "definicja-editable");
             Definicja.CreatedInJs = true;
             Definicja.setAttribute("new", "");
+            Definicja.setAttribute("root", "");
             notatki.appendChild(Definicja);
             break;
           case 'grupa':
@@ -24,6 +26,7 @@ export function DodajNotatke()
             const grupa = createElement("grupa-select");
             grupa.CreatedInJs = true;
             grupa.setAttribute("new","");
+            grupa.setAttribute("root", "");
             notatki.appendChild(grupa);
     }
     //notatki.appendChild(pojemnik);

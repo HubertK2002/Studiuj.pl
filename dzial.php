@@ -20,7 +20,7 @@ Dodaj lekcję: <input type="text" name="lekcja"/>
 
     </form>
     <?php
-    $lekcje = DB::exec("select * from `$dzial`");
+    $lekcje = DB::sql_row("select * from `$dzial`");
     while($row=mysqli_fetch_assoc($lekcje)): ?>
         <form action="lekcja.php" method="POST">
             <input type="hidden" name="lekcja" value="<?php echo $row['nazwa'] ?>">

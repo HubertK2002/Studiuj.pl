@@ -9,7 +9,7 @@ require_once('db.php');
 
         $dbname = "Zajecia";
         $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$dbname'";
-        $result = db::exec($query);
+        $result = db::sql_row($query);
         if ($result && !mysqli_num_rows($result) > 0) {
            $query = "CREATE DATABASE Zajecia CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;";
            db::exec($query);
@@ -28,7 +28,7 @@ require_once('db.php');
              DB::exec("insert into zajecia values ('{$_POST['zajecie']}');");
          }
         $query = "Select nazwa from zajecia";
-        $result =  db::exec($query);
+        $result =  db::sql_row($query);
         while($row=mysqli_fetch_assoc($result)): ?>
             <form action="dzial.php" method="POST">
                 <input type="hidden" name="dzial" value="<?php echo $row['nazwa'] ?>">

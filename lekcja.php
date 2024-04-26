@@ -51,7 +51,7 @@ $lesson->print_title();
         $data = $note->$type;
         switch($type) {
             case 'Grupa':
-                $sql = "insert into struktury values (null, '{$data->Title}', 'Grupa', '{$_POST['lekcja']}', 1)";
+                $sql = "insert into struktury values (null, '{$data->Title}', 'Grupa', '{$_POST['lekcja']}', {$data->Root})";
                 $structure_id = DB::exec($sql);
                 $ids = array();
                 echo $sql;
@@ -81,8 +81,11 @@ $lesson->print_title();
                     echo $data->Properties->Title;
                     return $image;
                 break;
-                default:
+            case 'Tabela wierszowa':
+                break;
+            default:
                 echo $type;
+                break;
             
         }
     }
