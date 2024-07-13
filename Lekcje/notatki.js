@@ -1,8 +1,5 @@
-//import * as ta from '/studia/tabela_wierszowa.js';
-import * as myImport from '/studia/definicja.js';
 
-
-export function DodajNotatke()
+function DodajNotatke()
 {
     const rodzaj = document.getElementById("rodzaj_notatki").value;
     switch(rodzaj)

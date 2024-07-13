@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas{
+            margin: 0 auto;
+            height: 90vh;
+            aspect-ratio: 841/594;
+        }
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: row;
+        }
+        div {
+            border: 1px outset black;
+            background-color: rgb(247, 247, 247);
+            width: 200px;
+            height: 90vh;
+            
+        }
+    </style>
+</head>
+<body>
+    <div id="right_panel"></div>
+    <canvas id="canvas" style="border:1px solid black;" width="2123" height="1500">
+    </canvas>
+    <div id="right_panel"></div>
+</body>
+<script>
+
+    class Point {
+        constructor(x,y, xOpis, yOpis) {
+            this.X = x;
+            this.Y = y;
+            this.XOpis = xOpis;
+            this.YOpis = yOpis;
+        }
+    }
+
+    class Rysuj {
+        
+        THeight = 1200;
+        TWidth = 2900;
+
+        Straty = [
+            new Point(0,1070, "H1"),
+            new Point(1000,915, "H2"),
+            new Point(1120,896.4),
+            new Point(1120,661),
+            new Point(1320, 630, "H3"),
+            new Point(1440, 611.4),
+            new Point(1440, 481.2),
+            new Point(1540, 465.7, "H4"),
+            new Point(1640, 450.2),
+            new Point(1640, 209),
+            new Point(1760, 191, "H5"),
+            new Point(1880, 172.4),
+            new Point(1880, 199.8),
+            new Point(1880,183.6),
+            new Point(1900,178.7, "H6", "SKIP"),
+            new Point(2900, 137.7, "H7")
+        ]
+
+        Energia = [
+            new Point(0,1105, "H1"),
+            new Point(1000,950, "H2"),
+            new Point(1120,931.4),
+            new Point(1120,696),
+            new Point(1320, 665, "H3"),
+            new Point(1440, 646.4),
+            new Point(1440, 516.2),
+            new Point(1540, 600, "H4"),
+            new Point(1640, 685.2),
+            new Point(1640, 444),
+            new Point(1760, 426, "H5"),
+            new Point(1880, 407.4),
+            new Point(1880, 407.4),
+            new Point(1880,391.1),
+            new Point(1900,386.2, "H6", "SKIP"),
+            new Point(2900, 345.2, "H7")
+        ]
+
+        constructor() {
+            this.canvas = document.getElementById("canvas");
+            this.Height = this.canvas.height;
+            this.Width = this.canvas.width;
+            this.offset = this.Height/15;
+            this.krok = this.offset/3;
+            this.height = this.Height - 2 * this.offset;
+            this.width = this.Width - 2 * this.offset;
+            this.ctx = this.canvas.getContext("2d");
+            this.ctx.strokeStyle = 'black';
+            this.ctx.lineWidth = 3;
+            this.ctx.font = "normal 30px Arial";
+        }
+
+        initAxes() {
+            this.drawLine(0,0,0, this.height);
+            this.drawLine(0,0,this.width, 0);
+            this.drawUpRot();
+            this.drawRightRot();
+            //this.text(-2 * this.krok,this.height, this.THeight);
+            //this.text(this.width,-2 * this.krok, this.TWidth);
+            this.ctx.save();
+        }
+
+        RysujStraty() {
+            this.beginPath();
+            this.moveTo(0,0);
+            this.Straty.forEach((point) => {
+                this.lineTo(point.X * this.width / this.TWidth, point.Y * this.height / this.THeight);
+            })
+            this.stroke();
+            this.ctx.setLineDash([10, 10]);
+            this.Straty.forEach((point) => {
+                let actX = point.X * this.width / this.TWidth;
+                let actY = point.Y * this.height / this.THeight;
+
+                if(point.XOpis != null) {
+                    this.ctx.fillStyle = "black";
+                    this.ctx.strokeStyle = "black";
+                    this.ctx.textStyle = "black";
+                    this.beginPath();
+                    this.moveTo(actX, actY);
+                    this.lineTo(actX,0);
+                    this.stroke();
+                    this.text(actX, -2 * this.krok, point.XOpis);
+                    this.ctx.strokeStyle = "red";
+                    if(point.YOpis == "SKIP") return;
+                    this.beginPath();
+                    this.moveTo(actX, actY);
+                    this.lineTo(0,actY);
+                    this.stroke();
+                    this.ctx.fillStyle = "red";
+                    this.text(-2.2 * this.krok, actY, Math.round(point.Y));
+                }
+            })
+        }
+        
+        RysujEnergie() {
+            this.ctx.strokeStyle = "blue";
+            this.beginPath();
+            this.moveTo(this.Energia[0].X * this.width / this.TWidth, this.Energia[0].Y * this.height / this.THeight);
+            this.Energia.forEach((point) => {
+                this.lineTo(point.X * this.width / this.TWidth, point.Y * this.height / this.THeight);
+            })
+            this.stroke();
+        }
+
+        drawLine(x1,y1,x2,y2) {
+            this.beginPath();
+            this.moveTo(x1, y1);
+            this.lineTo(x2, y2);
+            this.stroke();
+        }
+
+        moveTo(x,y) {
+            this.ctx.moveTo(x + this.offset, this.height - y + this.offset);
+        }
+        lineTo(x,y) {
+            this.ctx.lineTo(x + this.offset, this.height - y + this.offset);
+        }
+        beginPath() {
+            this.ctx.beginPath();
+        }
+        stroke(){
+            this.ctx.stroke();
+        }
+
+        drawUpRot() {
+            this.ctx.beginPath();
+            this.moveTo(0, 0 + this.height);
+            this.lineTo(this.krok, this.krok * -1 + this.height);
+            this.lineTo(this.krok * -1, this.krok * -1 + this.height);
+            this.lineTo(0, 0 + this.height);
+            this.ctx.fill();
+        }
+        drawRightRot() {
+            this.ctx.beginPath();
+            this.moveTo(this.width + this.krok, 0);
+            this.lineTo(this.width, this.krok);
+            this.lineTo(this.width, -1 * this.krok);
+            this.lineTo(this.width + this.krok,0);
+            this.ctx.fill();
+        }
+        text(x,y,text) {
+            this.ctx.fillText(text, x + this.offset, this.height - y + this.offset);
+        }
+
+    }
+    const rysuj = new Rysuj();
+    rysuj.initAxes();
+    rysuj.RysujStraty();
+    rysuj.RysujEnergie();
+    /*const canvas = document.getElementById("canvas");
+    let height = canvas.height;
+    let width = canvas.width;
+    if (canvas.getContext) {
+    let ctx = canvas.getContext("2d");
+    let text = canvas.getContext("2d");
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 3;
+    drawLine(100,100,100,height - 100, ctx);
+    ctx.beginPath();
+    ctx.moveTo(100, 50);
+    ctx.lineTo(150, 100);
+    ctx.lineTo(50, 100);
+    ctx.lineTo(100, 50);
+    ctx.fill();
+    drawLine(100,height - 100,width-100,height - 100, ctx);
+    ctx.moveTo(width-50, height - 100);
+    ctx.lineTo(width-100, height - 50);
+    ctx.lineTo(width-100, height - 150);
+    ctx.lineTo(width-50, height - 100);
+    ctx.fill();
+    text.font = "normal 40px Arial";
+    text.fillText(height, 40, 200);
+  }*/
+
+  function drawLine(x1,y1,x2,y2, ctx) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+</script>

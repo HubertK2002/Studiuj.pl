@@ -30,9 +30,6 @@ class Grupa extends HTMLElement
         this.className = "select";
         
     }
-    create() {
-                
-    }
 
     getData() {
         return {
