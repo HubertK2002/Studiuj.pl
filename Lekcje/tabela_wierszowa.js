@@ -50,6 +50,10 @@ class EditTable extends HTMLTableElement {
         this.appendChild(this.Head);
         this.appendChild(this.Body);
     }
+    connect() {
+        this.Head = this.querySelector("thead");
+        this.Body = this.querySelector("tbody");
+    }
 
     getData() {
         return {
