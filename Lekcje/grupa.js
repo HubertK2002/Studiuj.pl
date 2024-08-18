@@ -222,9 +222,9 @@ class FileLabel extends HTMLLabelElement {
     constructor() {
         super();
 
-        this.addEventListener('dragenter', (event) => this.dragstart(label));
-        this.addEventListener('dragleave', (event) => this.dragleave(label));
-        this.addEventListener('drop', (event) => this.drop(event, label), false);
+        this.addEventListener('dragenter', (event) => this.dragstart());
+        this.addEventListener('dragleave', (event) => this.dragleave());
+        this.addEventListener('drop', (event) => this.drop(event), false);
         this.addEventListener('dragover', (event) => {event.preventDefault();}, false);
         this.addEventListener('click', (event) => this.click(event));
         this.className = "custom-file-upload";
@@ -258,7 +258,7 @@ class FileLabel extends HTMLLabelElement {
             const reader = new FileReader();
     
             reader.onload = (e) => {
-                label.style.backgroundImage = `url('${e.target.result}')`;
+                this.style.backgroundImage = `url('${e.target.result}')`;
             };
     
             reader.readAsDataURL(file);
